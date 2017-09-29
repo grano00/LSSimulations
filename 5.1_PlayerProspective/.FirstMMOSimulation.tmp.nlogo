@@ -817,7 +817,7 @@ rndseed
 rndseed
 1
 2000
-35.0
+14.0
 1
 1
 NIL
@@ -829,7 +829,7 @@ INPUTBOX
 598
 256
 rndseed
-35.0
+14.0
 1
 0
 Number
