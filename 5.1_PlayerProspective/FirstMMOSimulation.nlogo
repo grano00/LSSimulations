@@ -33,14 +33,42 @@ globals [
  average-newbie-level
  average-level
 
+ ;arrays to save the results
+ average-hardcore-level-list
+ average-midcore-level-list
+ average-casual-level-list
+ average-newbie-level-list
+ average-level-list
+
+ filename
+
+ ns-counter ;It counts the simulations
+
+ all-ls ;It is an array that cointains all the names of the Looting Systems
+ ls-counter ;It is a counter for the LSs
+
+ old-seed
 ]
 
 
 to setup
+  clear-all
+  set filename "results.csv"
 
+  if save-csv [create-new-csv]
+  set-setup
+end
+
+
+
+to set-setup
+
+
+  clear-turtles
+
+  set old-seed rndseed
   random-seed rndseed
 
-  clear-all
 
   set average-hardcore-level 0
   set average-midcore-level 0
@@ -48,25 +76,66 @@ to setup
   set average-newbie-level 0
   set average-level 0
 
+  set average-hardcore-level-list []
+  set average-midcore-level-list []
+  set average-casual-level-list []
+  set average-newbie-level-list []
+  set average-level-list []
+
+
   ;generate the initial ammout of players.
   ;percentageOfNewbie is a the value of newbies that start after the 100 mission
   create-players nplayers round (percentageOfNewbie * nplayers)
 
   set use-newbie false
+  set ns-counter 0
+
+
 
   reset-ticks
 end
 
+to setup-all-ls
+  set all-ls ["rolling" "karma" "pure-list" "suicide-kings" "dkp-variable-price" "dkp-fix-price" "dkp-auction" "dkp-zero-sum" "dkp-relational" "dual-token"]
+end
+
+
+to reset-ns
+  random-seed ((random 1000) + 1)
+  reset-ticks
+
+  set average-hardcore-level 0
+  set average-midcore-level 0
+  set average-casual-level 0
+  set average-newbie-level 0
+  set average-level 0
+
+  clear-turtles
+
+  create-players nplayers round (percentageOfNewbie * nplayers)
+
+  set use-newbie false
+end
+
+
+to go-all-ls
+  setup-all-ls
+  foreach all-ls [
+    [x] ->
+      set LootingSystem x
+      set-setup
+      go
+  ]
+
+end
 
 to go
 
-
+while [ns-counter < ns] [
   reset-turtle
   ;Loop untile the max number of mission
   ifelse n-mission > ticks [
-    if ticks > start-newbie-value [
-      set-newbie
-    ]
+    if ticks > start-newbie-value [set-newbie]
     let raid-players []
     set raid-players create-raid-team
 
@@ -79,14 +148,30 @@ to go
     get-the-item looter item-power
     perform-avarage-level
 
-
     tick
   ][
-    show-results
-    stop
+  ;  show-results
+    save-to-array
+
+    set rndseed ((random 1000) + 1)
+    reset-ns
+    set ns-counter ns-counter + 1
   ]
+]
+
+perform-final-results
+if save-csv [save-results]
+set rndseed old-seed
+stop
+end
 
 
+;This method create a csv file where the results will be stored
+to create-new-csv
+  carefully [ file-delete filename] [ print "File not exist" ]
+  file-open filename
+  file-print "ls,hardcore,midcore,casual,newbie,average"
+  file-close
 end
 
 ;This method reset the temporary information of each turtle
@@ -96,6 +181,44 @@ to reset-turtle
    set dice -1
    set raid-partecipation false
   ]
+end
+
+;This method save the results in a csv file
+to save-results
+  file-open filename
+  file-print (word LootingSystem "," mean average-hardcore-level-list "," mean average-midcore-level-list "," mean average-casual-level-list "," mean average-newbie-level-list "," mean average-level-list)
+  file-close
+end
+
+;This method perform the average on the result lists and print the output!
+to perform-final-results
+
+  output-type "\n\n\n\n\n FINAL RESULTS of " output-type LootingSystem output-type ": \n\n"
+  output-type "average-hard-lvl " output-type mean average-hardcore-level-list
+  output-type " - Variance " output-type variance average-hardcore-level-list output-type "\n"
+
+  output-type "average-mid-lvl " output-type mean average-midcore-level-list
+  output-type " - Variance " output-type variance average-midcore-level-list output-type "\n"
+
+  output-type "average-casual-lvl " output-type mean average-casual-level-list
+  output-type " - Variance " output-type variance average-casual-level-list output-type "\n"
+
+  output-type "average-newbie-lvl " output-type mean average-newbie-level-list
+  output-type " - Variance " output-type variance average-newbie-level-list output-type "\n"
+
+  output-type "average-lvl " output-type mean average-level-list
+  output-type " - Variance " output-type variance average-level-list output-type "\n"
+
+end
+
+;This methods save in an array of dimesion ns the results
+to save-to-array
+ set average-hardcore-level-list lput average-hardcore-level average-hardcore-level-list
+ set average-midcore-level-list lput average-midcore-level average-midcore-level-list
+ set average-casual-level-list lput average-casual-level average-casual-level-list
+ set average-newbie-level-list lput average-newbie-level average-newbie-level-list
+ set average-level-list lput average-level average-level-list
+
 end
 
 ;This method perfom the average-level of each category of players
@@ -132,27 +255,32 @@ to get-the-item  [player item-power]
     ;p defines the probability to incremente the character's power
     let p 0
     set p normal-distribution x mu sigma
-    ;let rndval random-float 1
-    let rndval random 100
-    set rndval rndval / 100
+    let rndval random-float 1
+;    let rndval random 100
+;    set rndval rndval / 100
 
-    ;===OUTPUT====
-    output-type "Hi, I am " output-type player output-type ", I am a "
-    if game-time = 2 [output-type "HARDCORE"]
-    if game-time = 1 [output-type "MIDCORE"]
-    if game-time = 0 [output-type "CASUAL"]
-    output-type " player and I have the " output-type precision p 4
-    output-type " probability to increase the level.... \n I have generate the number " output-type precision rndval 4
-    output-type " so: \n "
+;Uncomment the bottom code to print the outputs.
+;Consider that it decrease the simulations performance
 
+;    ;===OUTPUT====
+;    output-type "Hi, I am " output-type player output-type ", I am a "
+;    if game-time = 2 [output-type "HARDCORE"]
+;    if game-time = 1 [output-type "MIDCORE"]
+;    if game-time = 0 [output-type "CASUAL"]
+;    output-type " player and I have the " output-type precision p 4
+;    output-type " probability to increase the level.... \n I have generate the number " output-type precision rndval 4
+;    output-type " so: \n "
+;
     ifelse (p >= rndval)[
       set level level + x
-      output-type "I INCREASE the level, my level now is: " output-type level
+;      output-type "I INCREASE the level, my level now is: " output-type level
     ]
     [
-      output-type "I have NOT increase the level, my level is: " output-type level
+;      output-type "I have NOT increase the level, my level is: " output-type level
     ]
-    output-type "\n======================================================\n"
+;    output-type "\n======================================================\n"
+
+
   ]
 end
 
@@ -293,13 +421,14 @@ to-report dkp-fix [i-power]
   ;If a player has enough DKP and it is insterest, it can buy it
 
   let price 0
-  set price i-power * 5
+  set price i-power * 10
 
   foreach dkp-list[
     [x] ->
 
     ;Check if the player is interested and it is elegible
-    if [raid-partecipation and is-interested and dkp-points >= price] of turtle x
+    ;if [raid-partecipation and is-interested and dkp-points >= price] of turtle x
+    if [raid-partecipation and is-interested] of turtle x
     [
       ;It is an elegible players
       ;remove the price from its DKPs and report it
@@ -358,7 +487,7 @@ to-report dkp-relational [i-power]
   ;The interested player with the higher ration between dkp-gained and dkp-spent (and that has enough dkp) get the item
 
   let price 0
-  set price i-power * 5
+  set price i-power * 10
 
   ask turtles [set dkp-ratio -1]
   ask turtles with [raid-partecipation and is-interested and dkp-points >= price][
@@ -463,10 +592,13 @@ end
 ;it move the newbies in the last position in the list and
 ;allow newbie to partecipate at the raids
 to set-newbie
+
   if use-newbie = false [
     ;;Move the newbie in the last position of the lists
-    ask turtles with [i-am-newbie] [
-      set looter-list move-last who looter-list
+    if move-newbie-last-list [
+       ask turtles with [i-am-newbie] [
+         set looter-list move-last who looter-list
+       ]
     ]
     ;allow the newbie to partecipate at the raids
     set use-newbie true
@@ -511,7 +643,6 @@ to-report create-raid-team
 
     set j j + 1
   ]
-
   report players
 end
 
@@ -554,6 +685,7 @@ to create-players [p n]
   let g-time-counter 0
   ;assign the time features
   ask turtles[
+
     ;it was assigned in a random way.
     ;as probabilistc significance, it distributes the population equally on the 3 different types
     set game-time g-time-counter
@@ -575,7 +707,7 @@ to create-players [p n]
     set bonus-points random 30
 
     set dkp-gained dkp-points
-    set dkp-spent 0
+    set dkp-spent 1 ;it is equal to 1 (only for calcs)
 
     ;Set the raid partecipation of each player to false
     set raid-partecipation false
@@ -667,7 +799,7 @@ BUTTON
 81
 go
 go
-T
+NIL
 1
 T
 OBSERVER
@@ -700,13 +832,13 @@ CHOOSER
 LootingSystem
 LootingSystem
 "rolling" "karma" "pure-list" "suicide-kings" "dkp-variable-price" "dkp-fix-price" "dkp-auction" "dkp-zero-sum" "dkp-relational" "dual-token"
-0
+9
 
 PLOT
-974
-231
-1835
-605
+15
+351
+876
+725
 Increment Of Players Level
 NIL
 NIL
@@ -718,28 +850,11 @@ true
 false
 "" ""
 PENS
-"Average-Population-Level" 1.0 0 -16777216 true "" "show average-level"
-"Average-Harcore-Level" 1.0 0 -2674135 true "" "show average-hardcore-level"
-"Average-Midcore-Level" 1.0 0 -955883 true "" "show average-midcore-level"
-"Average-Casual-level" 1.0 0 -1184463 true "" "show average-casual-level"
-"Average-Newbie-Level" 1.0 0 -13791810 true "" "show average-newbie-level"
-
-BUTTON
-620
-101
-692
-134
-goonce
-go
-NIL
-1
-T
-OBSERVER
-NIL
-NIL
-NIL
-NIL
-0
+"Average-Population-Level" 1.0 0 -16777216 true "" "plot average-level"
+"Average-Harcore-Level" 1.0 0 -2674135 true "" "plot average-hardcore-level"
+"Average-Midcore-Level" 1.0 0 -955883 true "" "plot average-midcore-level"
+"Average-Casual-level" 1.0 0 -1184463 true "" "plot average-casual-level"
+"Average-Newbie-Level" 1.0 0 -13791810 true "" "plot average-newbie-level"
 
 SLIDER
 19
@@ -780,7 +895,7 @@ dice-dimension
 dice-dimension
 3
 100
-100.0
+12.0
 1
 1
 NIL
@@ -802,10 +917,10 @@ NIL
 HORIZONTAL
 
 OUTPUT
-58
-286
-837
-659
+1032
+10
+1811
+734
 11
 
 SLIDER
@@ -817,7 +932,7 @@ rndseed
 rndseed
 1
 2000
-35.0
+166.0
 1
 1
 NIL
@@ -829,10 +944,103 @@ INPUTBOX
 598
 256
 rndseed
-35.0
+166.0
 1
 0
 Number
+
+SWITCH
+217
+197
+390
+230
+move-newbie-last-list
+move-newbie-last-list
+0
+1
+-1000
+
+SLIDER
+27
+237
+199
+270
+ns
+ns
+1
+100
+4917.0
+1
+1
+NIL
+HORIZONTAL
+
+MONITOR
+678
+242
+751
+287
+ns-counter
+ns-counter
+17
+1
+11
+
+INPUTBOX
+216
+229
+371
+289
+ns
+4917.0
+1
+0
+Number
+
+BUTTON
+502
+101
+576
+134
+NIL
+go-all-ls
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+SWITCH
+686
+41
+791
+74
+save-csv
+save-csv
+0
+1
+-1000
+
+BUTTON
+409
+98
+494
+131
+NIL
+set-setup
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
 
 @#$#@#$#@
 ## WHAT IS IT?
@@ -842,6 +1050,10 @@ Number
 ## HOW IT WORKS
 
 (what rules the agents use to create the overall behavior of the model)
+
+##NUMBER OF SIMULATIONS
+
+The number of simulations ns (4917) is equal to the equation in the paper with a max variance equal to 3.2
 
 ## HOW TO USE IT
 

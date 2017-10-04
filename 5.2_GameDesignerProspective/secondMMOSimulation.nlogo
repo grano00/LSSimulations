@@ -1103,11 +1103,11 @@ to dkprelational
       ; if the preference is between 10 and 40, the system perform a probability to try to get the item 
       if( (([preference] of ?) > 10) AND (([preference] of ?) <= 40) )[
         set perc_preference ( (([preference] of ?) - 10) * 100 / 30 )
-        if ((random 100) < perc_preference )[ ; la percentuale di prendere l'item
+        if ((random 100) < perc_preference )[ 
           set get_item 1 
           set character_x ?
           ask ? [
-            set spent_points (spent_points + item_price) ;se si prende l'item vengono sommati i dkp spesi ai spent_points
+            set spent_points (spent_points + item_price)
             set present_pleasure  present_pleasure  + preference
             set count_item count_item + 1
             received_items_value
@@ -1131,6 +1131,7 @@ to dkprelational
     ]
   ]
 end
+
 to dualtoken
   let get_item 0 ; 0 or 1, it defines if a item was taken by a group member
   let perc_preference 0
