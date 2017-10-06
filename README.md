@@ -15,34 +15,45 @@ For a detailed explanation of installation and operation, please refer to the Ne
 
 # 5.1_In_the_shoes_of_the_player
 
-TODO - Insert here a software overview 
+The main goal of the simulation is to approximate the behaviour of a large number of players playing in groups in the same MMO, when different LSs are adopted.
 
 # 5.2_What_a_game_designer_dreams_of
 
-TODO - Insert here a software overview 
+It consider the whole MMO world from the point of view of the game designer, the information that can be derived from the previous simulation is clearly insufficient. 
+As a matter of fact, the goals of the company managing the game are to maximize both the number of (paying) players and their satisfaction; hence, the vision of a single individual is not enough.
+Players belonging to a specific category share common behavioural traits; hence, their relative number may influence heavily the general climate of a specific world, and – possibly – its success or failure.
+In this framework, our goal is to verify if the choice of a specific LS can influence – and to what extent – the balance among player types.
 
 # 6_Players_getting_competitive_MOBA_LS
 
-TODO - Insert here a software overview 
+Starting from League of Legends (LoL) data collected, through some interviewed to Italian and Finland players, we have set up a simulation aimed at measuring how much their satisfaction with the game is influenced by the LS. 
+This game is probably the most diffused and representative MOBA (another massive game genre).
+Interestingly, LoL has also been a pioneer in introducing a LS. 
+The simulation analyze the satisfaction of LoL players regarding the Hextech Crafting.
+
 
 # Authors
 
-Laura Anna Ripamonti
-Marco Granato
-Marco Trubian
-Antti Knutas
-Davide Gadia
-Dario Maggiorini
+ * Laura Anna Ripamonti
+ * Marco Granato
+ * Marco Trubian
+ * Antti Knutas
+ * Davide Gadia
+ * Dario Maggiorini
 
 # References
 
-De Felice D., Granato M., Ripamonti L.A., Trubian M., Gadia D., Maggiorini D. (2017). Effect of different Looting Systems on the behavior of players in a MMOG: simulation with real data, Springer Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering (Proceedings of EAI International Conference on Games fOr WELL-being - GOWELL - Revised Selected Papers) 181, pp. 110-118.
-Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Massive Online Games and Loot Distribution: an Elusive Problem, in Proc. SIMUTools 2012, 5th International ICST Conference on Simulation Tools and Techniques, Desenzano del Garda, Italy, March 19 - 23, 2012, pag. 226-233 ISBN: 978-1-4503-1510-4, DOI 10.4108/icts.simutools.2012.247777.
-Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Loot distribution in massive online games: Foreseeing impacts on the players base. In 2012 21st International Conference on Computer Communications and Networks (ICCCN), pages 1-5. IEEE.
-Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). The Perfect Looting System: Looking for a Phoenix?, Computational Intelligence and Games (CIG) 2012 IEEE Conference on, pp. 371-378.
+ * De Felice D., Granato M., Ripamonti L.A., Trubian M., Gadia D., Maggiorini D. (2017). Effect of different Looting Systems on the behavior of players in a MMOG: simulation with real data, Springer Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering (Proceedings of EAI International Conference on Games fOr WELL-being - GOWELL - Revised Selected Papers) 181, pp. 110-118.
+ * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Massive Online Games and Loot Distribution: an Elusive Problem, in Proc. SIMUTools 2012, 5th International ICST Conference on Simulation Tools and Techniques, Desenzano del Garda, Italy, March 19 - 23, 2012, pag. 226-233 ISBN: 978-1-4503-1510-4, DOI 10.4108/icts.simutools.2012.247777.
+ * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Loot distribution in massive online games: Foreseeing impacts on the players base. In 2012 21st International Conference on Computer Communications and Networks (ICCCN), pages 1-5. IEEE.
+ * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). The Perfect Looting System: Looking for a Phoenix?, Computational Intelligence and Games (CIG) 2012 IEEE Conference on, pp. 371-378.
 
 
 # License
+
+![alt text](https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png)
+This software is diffused with Creative Commons license (CC) http://creativecommons.org/licenses/by-nc-sa/4.0/
+If you are writing a scientific paper you could also give attribution by citing the papers described in Section References
 
 # Acknowledgments
 

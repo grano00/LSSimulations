@@ -37,6 +37,7 @@ Lastly, the plot area on the bottom visualize the satisfaction graph. It can be 
 ## THINGS TO NOTICE
 
 The enviroment uses the text output consiedring the point of view of turtle-to-follow.
+The software was developed and tested using NetLogo 6.0.1
 
 ## CREDITS AND REFERENCES
 
