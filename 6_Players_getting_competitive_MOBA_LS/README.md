@@ -19,17 +19,17 @@ Thus, the enviroment can be consider plug and play. To use it with the default p
 
 Anyway, in the interface tab, the user can modify these parameters:
 
-- "my-seed" and "my-random-seed": If my random seed is setted to off, the enviroment use seed described in "my-seed" in order to allow the simulation reproducibility;
-- "number-of-days": defines the simulation length. If "the defined-number-of-days" is setted to off, the simulation proceeds infinitely;
-- The "*-number" and "n-*" input window defines the agent topology distribution;
-- The "number-starting-char" defines the number of starting characters of each agent;
-- "max-friends-list" defines the maximum number of frieds for a single agent;
-- "friend-probability" defines the probability after a winning to add a member to a friend list (if the player loses the probability is lower);
-- "play-with-friend-prob" defines the probabilty to insert a friend in agent team
-- "p-casual/mid/hardcore" input monitors define the probability to involve the agent in a match;
-- The bottom-left input monitors define the satisfaction values regarding the LS;
-- The input monitors with "*-win" define the probability of each agent to help the team to winning the match;
-- The "ward-number" and "icon-number" define the number of favorite item (randomly generated) of, respectively, wards and icons.
+ * "my-seed" and "my-random-seed": If my random seed is setted to off, the enviroment use seed described in "my-seed" in order to allow the simulation reproducibility;
+ * "number-of-days": defines the simulation length. If "the defined-number-of-days" is setted to off, the simulation proceeds infinitely;
+ * The "*-number" and "n-*" input window defines the agent topology distribution;
+ * The "number-starting-char" defines the number of starting characters of each agent;
+ * "max-friends-list" defines the maximum number of frieds for a single agent;
+ * "friend-probability" defines the probability after a winning to add a member to a friend list (if the player loses the probability is lower);
+ * "play-with-friend-prob" defines the probabilty to insert a friend in agent team
+ * "p-casual/mid/hardcore" input monitors define the probability to involve the agent in a match;
+ * The bottom-left input monitors define the satisfaction values regarding the LS;
+ * The input monitors with "*-win" define the probability of each agent to help the team to winning the match;
+ * The "ward-number" and "icon-number" define the number of favorite item (randomly generated) of, respectively, wards and icons.
 
 Lastly, the plot area on the bottom visualize the satisfaction graph. It can be exported in a ".csv" file using the contextual menu.
 
@@ -57,6 +57,7 @@ Dario Maggiorini
 Journal Paper
 
 Conference Papers
+
  * De Felice D., Granato M., Ripamonti L.A., Trubian M., Gadia D., Maggiorini D. (2017). Effect of different Looting Systems on the behavior of players in a MMOG: simulation with real data, Springer Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering (Proceedings of EAI International Conference on Games fOr WELL-being - GOWELL - Revised Selected Papers) 181, pp. 110-118.
  * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Massive Online Games and Loot Distribution: an Elusive Problem, in Proc. SIMUTools 2012, 5th International ICST Conference on Simulation Tools and Techniques, Desenzano del Garda, Italy, March 19 - 23, 2012, pag. 226-233 ISBN: 978-1-4503-1510-4, DOI 10.4108/icts.simutools.2012.247777.
  * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Loot distribution in massive online games: Foreseeing impacts on the players base. In 2012 21st International Conference on Computer Communications and Networks (ICCCN), pages 1-5. IEEE.
