@@ -40,7 +40,6 @@ globals [
  average-newbie-level-list
  average-level-list
 
- filename
 
  ns-counter ;It counts the simulations
 
@@ -53,7 +52,6 @@ globals [
 
 to setup
   clear-all
-  set filename "results.csv"
 
   if save-csv [create-new-csv]
   set-setup
@@ -101,7 +99,8 @@ end
 
 
 to reset-ns
-  random-seed ((random 1000) + 1)
+  set rndseed rndseed + 1
+  random-seed rndseed
   reset-ticks
 
   set average-hardcore-level 0
@@ -153,7 +152,6 @@ while [ns-counter < ns] [
   ;  show-results
     save-to-array
 
-    set rndseed ((random 1000) + 1)
     reset-ns
     set ns-counter ns-counter + 1
   ]
@@ -186,7 +184,7 @@ end
 ;This method save the results in a csv file
 to save-results
   file-open filename
-  file-print (word LootingSystem "," mean average-hardcore-level-list "," mean average-midcore-level-list "," mean average-casual-level-list "," mean average-newbie-level-list "," mean average-level-list)
+  file-print (word LootingSystem old-seed "," mean average-hardcore-level-list "," mean average-midcore-level-list "," mean average-casual-level-list "," mean average-newbie-level-list "," mean average-level-list)
   file-close
 end
 
@@ -256,8 +254,6 @@ to get-the-item  [player item-power]
     let p 0
     set p normal-distribution x mu sigma
     let rndval random-float 1
-;    let rndval random 100
-;    set rndval rndval / 100
 
 ;Uncomment the bottom code to print the outputs.
 ;Consider that it decrease the simulations performance
@@ -294,8 +290,9 @@ to-report looting-system [rplayer i-power]
     set dkp-points dkp-points + dkp-gain
     set dkp-gained dkp-gained + dkp-gain
   ]
-
-  define-interested-players
+  while [count turtles with [is-interested and raid-partecipation] < (raid-dimension / 10)] [
+    define-interested-players
+  ]
   order-dkp-list
 
   ifelse LootingSystem = "rolling" [set looter rolling]
@@ -342,7 +339,7 @@ to-report karma
   ;check between the interested agents who wants to use their bonus
   ask-concurrent turtles with [is-interested and raid-partecipation][
     set dice (random 100 + 1)
-    if(is-loot-interested) [ set dice dice + bonus-points ]
+    if(is-interested) [ set dice dice + bonus-points ]
   ]
 
   ;find the greater, remove its bonus points, and report it
@@ -366,7 +363,7 @@ to-report start-purelist [startingPosition]
   set looter item startingPosition looter-list
   set looter-list move-last looter looter-list
 
-  ifelse ([raid-partecipation] of turtle looter)
+  ifelse ([raid-partecipation = false] of turtle looter)
   [
     ;It is not a member of the raid. Thus, we select the next in the list
     report start-purelist (startingPosition + 1)
@@ -377,24 +374,33 @@ to-report start-purelist [startingPosition]
   ]
 end
 
-;Implementation of Suicide Kings LS
 to-report suicide-kings
+  report start-suicide-kings 0
+end
+
+;Implementation of Suicide Kings LS
+to-report start-suicide-kings [startingPosition]
   ;scrolls the list generated in setup and assigns the object to the first one that want the item.
   ;After that, it places the agent last in the list
+  let looter 0
+  set looter item startingPosition looter-list
 
-  foreach looter-list[
-    [x] ->
-
-    ;Check if the player is interested and it is elegible
-    if [raid-partecipation and is-interested] of turtle x
-    [
+  ;Check if the player is interested and it is elegible
+  ifelse [raid-partecipation and is-interested] of turtle looter
+  [
       ;It is an elegible players
       ;Move it in the last position of the list and report it
-      set looter-list move-last x looter-list
-      report x
-    ]
+      set looter-list move-last looter looter-list
+      report looter
   ]
+  [
+      report start-suicide-kings (startingPosition + 1)
+  ]
+
 end
+
+
+
 
 ;Implementation of DKP Variable Price LS
 to-report dkp-var-price
@@ -459,10 +465,7 @@ to-report dkp-zero-sum
   ;It does not follow any list. Thus, the system generate a new list
   ;When one user get the item, it splits its dkp with the others players of the team
 
-  let temp-list []
-  set temp-list shuffle looter-list
-
-  foreach temp-list[
+  foreach dkp-list[
     [x] ->
 
     ;Check if the player is interested and it is elegible
@@ -472,7 +475,8 @@ to-report dkp-zero-sum
       ;It get the item and distribute its dkp to others raid members
       let dkp-temp 0
       set dkp-temp [dkp-points] of turtle x
-      set dkp-temp ((dkp-temp / raid-dimension) - 1)
+      ask turtle x [set dkp-points 0]
+      set dkp-temp (dkp-temp / (raid-dimension - 1))
       ask turtle x [set raid-partecipation false]
       ask turtles with [raid-partecipation] [set dkp-points dkp-points + dkp-temp]
       ask turtle x [set raid-partecipation true]
@@ -484,18 +488,21 @@ end
 ;Implementation of DKP Relational
 to-report dkp-relational [i-power]
   ;Each item has a fixed price (10 times its power).
-  ;The interested player with the higher ration between dkp-gained and dkp-spent (and that has enough dkp) get the item
+  ;The interested player with the higher ration between dkp-gained and dkp-spent get the item
 
   let price 0
   set price i-power * 10
 
   ask turtles [set dkp-ratio -1]
-  ask turtles with [raid-partecipation and is-interested and dkp-points >= price][
-   set dkp-ratio  dkp-gained / dkp-spent
+  ask turtles with [raid-partecipation and is-interested][
+   set dkp-ratio dkp-points / dkp-spent
   ]
   let winner 0
   set winner [who] of max-one-of turtles [dkp-ratio]
-  ask turtle winner [ set dkp-points dkp-points - price]
+  ask turtle winner [
+    set dkp-spent dkp-spent + price
+    set dkp-points dkp-points - price
+  ]
   report winner
 
 end
@@ -674,7 +681,6 @@ end
 ;It report the value of x in a normal distribution with mu as avarage and sigma as standard deviation
 to-report normal-distribution [x mu sigma]
   report (e ^ ( -1 * (x - mu) ^ 2 / (2 * (sigma ^ 2))) / (sigma * sqrt(2 * pi)))
-  ;report (e ^ ( -1 * (x - mu) ^ 2 / (2 * (sigma))) / (sqrt(sigma) * sqrt(2 * pi)))
 end
 
 ;It generates the players, assigning to them their features
@@ -834,28 +840,6 @@ LootingSystem
 "rolling" "karma" "pure-list" "suicide-kings" "dkp-variable-price" "dkp-fix-price" "dkp-auction" "dkp-zero-sum" "dkp-relational" "dual-token"
 9
 
-PLOT
-15
-351
-876
-725
-Increment Of Players Level
-NIL
-NIL
-0.0
-10.0
-0.0
-10.0
-true
-false
-"" ""
-PENS
-"Average-Population-Level" 1.0 0 -16777216 true "" "plot average-level"
-"Average-Harcore-Level" 1.0 0 -2674135 true "" "plot average-hardcore-level"
-"Average-Midcore-Level" 1.0 0 -955883 true "" "plot average-midcore-level"
-"Average-Casual-level" 1.0 0 -1184463 true "" "plot average-casual-level"
-"Average-Newbie-Level" 1.0 0 -13791810 true "" "plot average-newbie-level"
-
 SLIDER
 19
 72
@@ -930,9 +914,9 @@ SLIDER
 188
 rndseed
 rndseed
-1
-2000
-166.0
+-5000
+5000
+-4224.0
 1
 1
 NIL
@@ -944,7 +928,7 @@ INPUTBOX
 598
 256
 rndseed
-166.0
+-4224.0
 1
 0
 Number
@@ -956,7 +940,7 @@ SWITCH
 230
 move-newbie-last-list
 move-newbie-last-list
-0
+1
 1
 -1000
 
@@ -1032,6 +1016,34 @@ BUTTON
 131
 NIL
 set-setup
+NIL
+1
+T
+OBSERVER
+NIL
+NIL
+NIL
+NIL
+1
+
+INPUTBOX
+35
+379
+268
+439
+filename
+results.csv
+1
+0
+String
+
+BUTTON
+612
+166
+776
+199
+generate_random_seed
+set rndseed ((random 10000) - 5000)
 NIL
 1
 T

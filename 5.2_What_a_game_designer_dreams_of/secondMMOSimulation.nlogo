@@ -161,7 +161,7 @@ to go
     STOP
   ]
   if ((ticks mod 100) = 0)[ ; start a new mission
-    crea_group
+    create_group
     mission_partecipation
   ]
   ;apply tax (if they are active)
@@ -183,7 +183,7 @@ to go
   tick
 end
 
-to crea_group
+to create_group
   ;each group is structured by 5 members, with at least: 1 warrior, 1 magician, 1 priest
   ;the others are assigned randomly
   
@@ -1119,7 +1119,7 @@ to dkprelational
         set get_item 1
         set character_x ?
         ask ? [
-          set spent_points (spent_points + item_price) ;se si prende l'item vengono sommati i dkp spesi ai spent_points
+          set spent_points (spent_points + item_price)
           set present_pleasure  present_pleasure  + preference
           set count_item count_item + 1
           received_items_value
