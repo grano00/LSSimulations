@@ -1059,7 +1059,18 @@ The setup button should be pressed if and only if you want to create a new and e
 
 In the interface tab, the user can modify these parameters:
 
-TODO
+ * "nplayers": it defines the amount of agents generated for the simulation
+ * ‎"LootingSystem": it defines which looting system will be used
+ * ‎"percentageOfNewbie": the number of newbie (in percentage [0-1] where e.g. 0.1 is equal to 10%) created by the simulation
+ * ‎"n-mission": number of missions available in the simulation
+ * ‎"start-newbie-value": identifies the mission after which the newbies will start to play
+ * ‎"ns": it defines the number of simulations
+ * ‎"dice-dimension": dimension of the dice used by some Looting System
+ * ‎"raid-dimension": number of players that participate in a mission
+ * ‎"move-newbie-last-list": if it is true, when the newbie group starts to play, they will moved in the last position of each lists
+ * ‎"rndseed": it is the assigned seed in order to keep the results reproduciple
+ * ‎"save-csv": if it is true,  the simulation results were saved in a file
+ * ‎"filename": it is the file name where the data will be stored. If it is a file name (e.g. results.csv) than it will be stored in the same path of the simulation source code. Otherwise, if it is a absolute path + file name (e.g. C:/results.csv) the file will be stored in the selected path (i.e. C:/)
 
 Lastly, the output area on the right visualize the increment of power of the different category of players.
 
@@ -1084,7 +1095,9 @@ Dario Maggiorini
 
 Journal Paper
 
+
 Conference Papers
+
  * De Felice D., Granato M., Ripamonti L.A., Trubian M., Gadia D., Maggiorini D. (2017). Effect of different Looting Systems on the behavior of players in a MMOG: simulation with real data, Springer Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering (Proceedings of EAI International Conference on Games fOr WELL-being - GOWELL - Revised Selected Papers) 181, pp. 110-118.
  * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Massive Online Games and Loot Distribution: an Elusive Problem, in Proc. SIMUTools 2012, 5th International ICST Conference on Simulation Tools and Techniques, Desenzano del Garda, Italy, March 19 - 23, 2012, pag. 226-233 ISBN: 978-1-4503-1510-4, DOI 10.4108/icts.simutools.2012.247777.
  * Maggiorini D., Nigro A., Ripamonti L.A., and Trubian M. (2012). Loot distribution in massive online games: Foreseeing impacts on the players base. In 2012 21st International Conference on Computer Communications and Networks (ICCCN), pages 1-5. IEEE.
@@ -1102,6 +1115,7 @@ This model was created as part of the projects: "Multi-Agent Simulations for the
 
 If you are writing a scientific paper you could also give attribution by citing the papers presented in Section HOW TO CITE
 <!-- 2017 Cite: To Define -->
+
 
 
 @#$#@#$#@

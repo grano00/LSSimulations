@@ -19,7 +19,18 @@ The setup button should be pressed if and only if you want to create a new and e
 
 In the interface tab, the user can modify these parameters:
 
-TODO
+ * "nplayers": it defines the amount of agents generated for the simulation
+ * ‎"LootingSystem": it defines which looting system will be used
+ * ‎"percentageOfNewbie": the number of newbie (in percentage [0-1] where e.g. 0.1 is equal to 10%) created by the simulation
+ * ‎"n-mission": number of missions available in the simulation
+ * ‎"start-newbie-value": identifies the mission after which the newbies will start to play
+ * ‎"ns": it defines the number of simulations
+ * ‎"dice-dimension": dimension of the dice used by some Looting System
+ * ‎"raid-dimension": number of players that participate in a mission
+ * ‎"move-newbie-last-list": if it is true, when the newbie group starts to play, they will moved in the last position of each lists
+ * ‎"rndseed": it is the assigned seed in order to keep the results reproduciple
+ * ‎"save-csv": if it is true,  the simulation results were saved in a file
+ * ‎"filename": it is the file name where the data will be stored. If it is a file name (e.g. results.csv) than it will be stored in the same path of the simulation source code. Otherwise, if it is a absolute path + file name (e.g. C:/results.csv) the file will be stored in the selected path (i.e. C:/)
 
 Lastly, the output area on the right visualize the increment of power of the different category of players.
 
