@@ -45,6 +45,8 @@ The simulation analyze the satisfaction of LoL players regarding the Hextech Cra
 
 Journal Paper
 
+* Ripamonti, L. A., Granato, M., Trubian, M., Knutas, A., Gadia, D., & Maggiorini, D. (2018). Multi-agent simulations for the evaluation of Looting Systems design in MMOG and MOBA games. Simulation Modelling Practice and Theory, 83, 124-148.
+
 Conference Papers
 
  * De Felice D., Granato M., Ripamonti L.A., Trubian M., Gadia D., Maggiorini D. (2017). Effect of different Looting Systems on the behavior of players in a MMOG: simulation with real data, Springer Lecture Notes of the Institute for Computer Sciences, Social Informatics and Telecommunications Engineering (Proceedings of EAI International Conference on Games fOr WELL-being - GOWELL - Revised Selected Papers) 181, pp. 110-118.
